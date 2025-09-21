@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modelo 3D</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'https://cdn.skypack.dev/three@0.129.0';
+        import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Agrega una luz para que el modelo sea visible
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 1, 1).normalize();
+        scene.add(directionalLight);
+
+        // Crea el cargador de modelos y especifica la ruta a tu archivo
+        const loader = new GLTFLoader();
+        loader.load(
+            'tu_modelo.glb', // Aquí pones la ruta o URL de tu modelo
+            function (gltf) {
+                scene.add(gltf.scene);
+            },
+            undefined,
+            function (error) {
+                console.error(error);
+            }
+        );
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
